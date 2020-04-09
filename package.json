@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "http-server": "^0.12.1",
+    "rollup": "^2.3.4"
+  },
+  "name": "attest",
+  "version": "2020.4.8",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {}
+}

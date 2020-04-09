@@ -1,0 +1,180 @@
+<html>
+
+<head>
+    <title>Attestation de déplacement dérogatoire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./awsm.min.css">
+
+    <style>
+        label.form-check-label {
+            display: flex;
+            align-items: baseline;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Covid-19 : [Better] Générateur d'attestation de déplacement dérogatoire</h1>
+    </header>
+
+    <main x-data="{data: main.init()}">
+
+        <aside>
+            Formulaires enregistrés
+            <ul>
+                <template x-for="item in Object.values(data.forms)" :key="item">
+                    <li x-bind:title="item.id">
+                        <a href @click.prevent="main.load(data, item.id)" x-text="item.prenom + ' ' + item.nom"></a>
+                        <a href @click.prevent="main.remove(data, item.id)">[supr] </a>
+                    </li>
+                </template>
+            </ul>
+        </aside>
+        <form>
+            <h4>Remplissez en ligne votre attestation numérique :</h4>
+
+            <label for="prenom"> Prénom * </label>
+            <input type="text" required id="prenom" name="prenom" placeholder="Jean" x-model="data.current.prenom">
+
+
+            <label for="nom"> Nom * </label>
+            <input type="text" required id="nom" name="nom" placeholder="Dupont" x-model="data.current.nom">
+
+            <label for="dateDeNaissance"> Date de naissance * </label>
+            <input type="date" required id="dateDeNaissance" name="dateDeNaissance"
+                x-model="data.current.dateDeNaissance">
+
+            <label for="lieuxDeNaissance"> Lieu de naissance *</label>
+            <input type="text" required id="lieuxDeNaissance" name="lieuxDeNaissance" placeholder="Rennes"
+                x-model="data.current.lieuxDeNaissance">
+
+            <label for="adresse"> Adresse *</label>
+            <input type="text" required id="adresse" name="adresse" placeholder="999 avenue de rennes"
+                x-model="data.current.adresse">
+
+            <label for="ville"> Ville *</label>
+            <input type="text" required id="ville" name="ville" placeholder="Rennes" x-model="data.current.ville">
+
+            <label for="codePostal"> Code Postal *</label>
+            <input type="number" required id="codePostal" name="codePostal" placeholder="35000"
+                x-model="data.current.codePostal">
+
+
+            <h5>Choisissez un motif de sortie</h5>
+
+            <label class="form-check-label" for="checkbox-travail">
+                <input type="checkbox" name="field-reason" id="checkbox-travail" value="travail">
+                <div class="md">
+                    **Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle**, lorsqu'ils
+                    sont indispensables à l'exercice d’activités ne pouvant être organisées sous forme de télétravail ou
+                    déplacements professionnels ne pouvant être différés.
+                </div>
+            </label>
+
+            <label class="form-check-label" for="checkbox-courses">
+                <input class="form-check-input" type="checkbox" name="field-reason" id="checkbox-courses"
+                    value="courses">
+
+                <div class="md">
+                    Déplacements **pour effectuer des achats de fournitures** nécessaires à l’activité
+                    professionnelle et des
+                    achats de première nécessité dans des établissements dont les activités demeurent autorisées <a
+                        href="https://www.service-public.fr/particuliers/actualites/A13921" target="_blank">(liste sur
+                        gouvernement.fr)</a>.
+                </div>
+            </label>
+
+            <label class="form-check-label" for="checkbox-sante">
+                <input class="form-check-input" type="checkbox" name="field-reason" id="checkbox-sante" value="sante">
+                <div class="md">
+                    **Consultations et soins** ne pouvant être assurés à distance et ne pouvant être différés ;
+                    **consultations et soins des patients atteints** d'une **affection de longue durée**.
+                </div>
+            </label>
+
+            <label class="form-check-label" for="checkbox-famille">
+                <input class="form-check-input" type="checkbox" name="field-reason" id="checkbox-famille"
+                    value="famille">
+                <div class="md">
+                    Déplacements pour **motif familial impérieux**, pour l’**assistance aux personnes vulnérables** ou
+                    **la garde
+                    d’enfants**.
+                </div>
+            </label>
+
+            <label class="form-check-label" for="checkbox-sport">
+                <input class="form-check-input" type="checkbox" name="field-reason" id="checkbox-sport" value="sport">
+                <span class="md"> __Déplacements brefs__, dans la limite d'une heure quotidienne et dans un rayon
+                    maximal d'un
+                    kilomètre autour du domicile, __liés soit à l'activité physique individuelle des personnes__, à
+                    l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes,
+                    __soit à la promenade avec les seules personnes regroupées dans un même domicile__, soit aux besoins
+                    des animaux de compagnie.</md>
+            </label>
+
+
+            <label class="form-check-label" for="checkbox-judiciaire">
+                <input class="form-check-input" type="checkbox" name="field-reason" id="checkbox-judiciaire"
+                    value="judiciaire">
+                <div class="md"> **Convocation judiciaire ou administrative.**</div>
+            </label>
+
+            <label class="form-check-label" for="checkbox-missions">
+                <input class="form-check-input" type="checkbox" name="field-reason" id="checkbox-missions"
+                    value="missions">
+                <div class="md">
+                    Participation à des **missions d’intérêt général** sur demande de l’autorité administrative.
+                </div>
+            </label>
+
+
+            <hr>
+            <h6>Date de signature <a href @click.prevent="main.now(data)">[Maintenant]</a></h6>
+
+            <label for="field-datesortie" class="md" x-init="date = new Date()">
+                Date de sortie
+                <input type="date" class="form-control" id="field-datesortie" name="datesortie" placeholder="JJ/MM/YYYY"
+                    required x-model="data.date">
+            </label>
+
+            <label for="field-heure" class="md">
+                Heure de sortie
+                <input type="time" class="form-control" id="field-heuresortie" name="heure" required=""
+                    x-model="data.time">
+            </label>
+
+
+            <hr>
+
+            <input type="button" value="Sauvgarder & Générer" @click="main.save(data); main.generate(data)">
+            <button type="button" @click="main.reset(data)">Reset</button>
+
+
+            <input type="button" value="Sauvgarder" @click="main.save(data)">
+
+        </form>
+    </main>
+
+
+
+    <script type="module">
+
+        import * as main from './main.js'
+        window.main = main
+
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lscache@1.3.0/lscache.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@0.8.2/marked.min.js"></script>
+    <script type="module">
+        import { md } from './md.js'
+        md('md')
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+</body>
+
+</html>
